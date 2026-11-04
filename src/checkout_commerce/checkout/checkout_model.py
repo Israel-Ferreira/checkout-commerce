@@ -28,7 +28,10 @@ class Checkout(Base):
     payment_id = Column(String(64), nullable=True)
     order_id = Column(String(64), nullable=True)
 
-    created_at = Column(DateTime, default=datetime.now(timezone.utc), nullable=False)
-
+    created_at = Column(
+        DateTime(timezone=True),
+        default=datetime.now(timezone.utc),
+        nullable=False,
+    )
     error = Column(String(256), nullable=True)
     total_amount = Column(Float, nullable=False)
