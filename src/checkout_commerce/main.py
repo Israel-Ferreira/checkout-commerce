@@ -14,8 +14,6 @@ from prometheus_fastapi_instrumentator import Instrumentator
 
 
 
-
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Perform any startup tasks here
