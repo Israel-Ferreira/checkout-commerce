@@ -10,6 +10,12 @@ from checkout_commerce.client_manager import client_manager
 from checkout_commerce.checkout.router import router as checkout_router
 
 
+from prometheus_fastapi_instrumentator import Instrumentator
+
+
+
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Perform any startup tasks here
@@ -31,6 +37,9 @@ app = FastAPI(
 
 
 app.include_router(checkout_router)
+
+instrumentator = Instrumentator().instrument(app)
+instrumentator.expose(app)
 
 @app.get("/health")
 async def health_check():
