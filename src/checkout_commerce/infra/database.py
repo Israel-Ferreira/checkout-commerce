@@ -26,9 +26,14 @@ async def get_db():
 
 
 async def create_tables():
+    """
+    Cria as tabelas no banco de dados postgresql com base nos modelos do
+    SQLAlchemy, usando a sessão do banco.
+    """
     from checkout_commerce.checkout.checkout_model import (
         Checkout,  # noqa: F401 - Import needed to register model with Base
     )
+
 
     """Create all tables in the database based on SQLAlchemy models"""
     async with engine.begin() as conn:
