@@ -39,12 +39,15 @@ app.include_router(checkout_router)
 instrumentator = Instrumentator().instrument(app)
 instrumentator.expose(app)
 
-@app.get("/health")
+@app.get("/health/liveness")
 async def health_check():
     payment_url = os.getenv("PAYMENT_SERVICE_URL")
     return {"status": payment_url}
 
 
+@app.get("/health/readiness")
+async def readiness_probe():
+    return {"status": "OK" }
 
 
 
