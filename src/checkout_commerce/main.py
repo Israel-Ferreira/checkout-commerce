@@ -13,6 +13,9 @@ from checkout_commerce.checkout.router import router as checkout_router
 from prometheus_fastapi_instrumentator import Instrumentator
 
 
+from checkout_commerce.infra.kafka_client import kafka_client
+
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -20,9 +23,12 @@ async def lifespan(app: FastAPI):
     await create_tables()
     await client_manager.startup()
 
+    await kafka_client.startup()
+
     yield
 
     await client_manager.shutdown()
+    await kafka_client.shutdown()
     # Perform any shutdown tasks here
 
 
@@ -41,12 +47,18 @@ instrumentator.expose(app)
 
 @app.get("/health/liveness")
 async def health_check():
+    """
+    Endpoint de Health Check -  Liveness Probe
+    """
     payment_url = os.getenv("PAYMENT_SERVICE_URL")
     return {"status": payment_url}
 
 
 @app.get("/health/readiness")
 async def readiness_probe():
+    """
+    Endpoint de Health Check - Readiness Probe
+    """
     return {"status": "OK" }
 
 
